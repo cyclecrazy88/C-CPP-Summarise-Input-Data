@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "./header/splitWord.h"
+#include "./header/summeriseData.h"
 
 void runResultSearch();
 
@@ -21,11 +22,15 @@ void readDataFromFile(){
 }
 
 void runResultSearch(){
+	summeriseDataStart();
 	WordType wordMessage = getNextWord();
 	while (wordMessage.itemFound){
-		printf ("WordData: %s %d\n", wordMessage.word , wordMessage.wordLength );
+		//printf ("WordData: %s %d\n", wordMessage.word , wordMessage.wordLength );
+		addNextItemToGrouping(wordMessage.word);
 		wordMessage = getNextWord();
+		break;
 	}
+	endDataSetSummary();
 
 
 

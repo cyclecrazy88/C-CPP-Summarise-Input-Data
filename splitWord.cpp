@@ -7,97 +7,103 @@
 
 using namespace std; 
 
+/*************************************************
+	Section Start - WordItem
+
+ Constuctor for the class
+*************************************************/
+WordItem::WordItem(char *inputData){
+	this->clearWordData();
+	//cout << "Initialise Word: "<< inputData <<"\n";
+	if (strlen(inputData) < WORDLENGTH ){	
+		//cout << "Constructor. Word can be added - "<<inputData<<"\n";
+		strcpy(this->dataInput,inputData);
+		//cout << "SetWord: " << this->dataInput<<"\n";
+	}
+}
+/*************************************************
+	Function - setWord. Set a word value for the item.
+*************************************************/
+void WordItem::setWord(char *inputData){
+	this->clearWordData();
+	if (strlen(inputData) < WORDLENGTH ){	
+	//cout << "WordItem -> setWord. Word can be added - "<<inputData<<"\n";
+		strcpy(this->dataInput,inputData);
+	}
+}
+
+/*************************************************
+	Function - getWord.
+		Copy a reference to the word into a memory location.
+*************************************************/
+void WordItem::getWord(char *outputData){
+	strcpy(outputData,this->dataInput);
+}
+
+/*************************************************
+	Function - getWord2.
+		Return a reference to the word.
+*************************************************/
+char* WordItem::getWord2(){
+	return this->dataInput;
+}
 
 
+/*************************************************
+	Function - getWord2.
+		Analysis Function - Output the word to the console.
+*************************************************/
+void WordItem::printWord(){
+	//cout << "WordItem -> printWord -> Current Word: "<<this->dataInput<<"\n";
+}
 
+/*************************************************
+	Function - clearWordData.
+		Data management function. - Initialise the word item
+		(Ensure the data set is nice and cleanly organised) - Zeroed array.
+*************************************************/
+void WordItem::clearWordData(){
+	// Initialise the pointer to the start of the array item.
+	char *characterData = &(this->dataInput[0]);
+	int dataLength = strlen(this->dataInput);
+	// Loop around the for loop, Ensure all the entries have a value of
+	// null to suggest not set.
+	for (int count = 0 ; count < dataLength ; count++){
+		// Set the value of the pointer variable at this position to null.
+		characterData[0] = '\0';
+		characterData++;
+	}
+}
 
-class WordItem{
-	// Hold into to the word for the list item.
-	char dataInput[WORDLENGTH];
-	int maximumLnegth;
-	public:
-		WordItem(char *inputData){
-			this->clearWordData();
-			//cout << "Initialise Word: "<< inputData <<"\n";
-			if (strlen(inputData) < WORDLENGTH ){	
-				//cout << "Constructor. Word can be added - "<<inputData<<"\n";
-				strcpy(this->dataInput,inputData);
-				//cout << "SetWord: " << this->dataInput<<"\n";
-			}
+/*************************************************
+	Section Start - ManageList
 
-		}
-
-		void setWord(char *inputData){
-			this->clearWordData();
-			if (strlen(inputData) < WORDLENGTH ){	
-				//cout << "WordItem -> setWord. Word can be added - "<<inputData<<"\n";
-				strcpy(this->dataInput,inputData);
-			}
-		}
-		// Copy the word data into a pointer. The calling function is responsible
-		// for ensuring that memory has been allocated for this task
-		void getWord(char *outputData){
-				strcpy(outputData,this->dataInput);
-		}
-
-		char* getWord2(){
-				return this->dataInput;
-		}
-		// Diagnositic function - print the word if it's available.
-		void printWord(){
-			//cout << "WordItem -> printWord -> Current Word: "<<this->dataInput<<"\n";
-		}
-	private:
-		/*******************************************************
-			Function - clearWordData.
-				Seek to initialise and set the word data so the corresponding values
-				set is equal to null.
-			*****************************************************/
-		void clearWordData(){
-			// Initialise the pointer to the start of the array item.
-			char *characterData = &(this->dataInput[0]);
-			int dataLength = strlen(this->dataInput);
-			// Loop around the for loop, Ensure all the entries have a value of
-			// null to suggest not set.
-			for (int count = 0 ; count < dataLength ; count++){
-				// Set the value of the pointer variable at this position to null.
-				characterData[0] = '\0';
-				characterData++;
-			}
-		}
-}; 
-
-/****************************************
-	Once the word data has been created. Create a list manager to manage the
-	input data set.
-*****************************************/
-class ManageList{
-	WordItem *wordData;
-	ManageList *childList;
-	public:
-		ManageList(WordItem *inputWordData){
-			wordData = inputWordData;
-			// Initialise the child list as this hasn't been set yet.
-			this->childList = NULL;
-			//cout << "ManageList -> Manage the word data list\n";
-		}
-
-		~ManageList(){
-			//cout << "Delete the the list item data.\n";
-			// Check to see if there is a word and a child. Cause these
-			// destructions to be initialised as well.
-		  if (this->wordData != NULL)
-					delete this->wordData;
-			if (this->childList != NULL)
-				delete this->childList;
-		}
-		/*************************************
-			Handler Function - addListItem
-				Function is responsible for adding the item to the end
-				 of the list.
-	
-		**************************************/
-		int addListItem(WordItem *wordData){
+ Constuctor for the class
+*************************************************/
+ManageList::ManageList(WordItem *inputWordData){
+	wordData = inputWordData;
+	// Initialise the child list as this hasn't been set yet.
+	this->childList = NULL;
+	//cout << "ManageList -> Manage the word data list\n";
+}
+/*************************************************
+	Destrutor for the class.
+*************************************************/
+ManageList::~ManageList(){
+	//cout << "Delete the the list item data.\n";
+	// Check to see if there is a word and a child. Cause these
+	// destructions to be initialised as well.
+  if (this->wordData != NULL)
+		delete this->wordData;
+	if (this->childList != NULL)
+		delete this->childList;
+}
+/*************************************
+	Handler Function - addListItem
+	Function is responsible for adding the item to the end
+		 of the list.	
+**************************************/
+int ManageList::addListItem(WordItem *wordData){
 			// Flag to indicate if the item was set or not.
 			bool itemIsSet = false;
 
@@ -155,80 +161,72 @@ class ManageList{
 
 		}
 
-		/************************************
-			Get a reference to the current word data object (reference)
-			to the corresponding item.
-		*************************************/
-		WordItem* getWordDataObject(){
-			return this->wordData;
-		}
-		/************************************
-			Get a reference to the corresponding managed list object.
-		*************************************/
-		ManageList* getManagedListObject(){
-			return this->childList;		
-		}
+/************************************
+	Get a reference to the current word data object (reference)
+	to the corresponding item.
+*************************************/
+WordItem* ManageList::getWordDataObject(){
+	return this->wordData;
+}
 
-		/*************************************
-			Set a reference to the next managed list object in sequence.
-		*************************************/
-		void setNextManagedListObject(ManageList *nextWord){
-			//cout << "Set Next Word: "<< 
-			//						nextWord->getWordDataObject()->getWord2() << "\n";
-			// Set the reference to the next child in the sequence.
-			if (this->childList == NULL)
-				this->childList = nextWord;
-			else{
-				cout << "\nCan't override child\n";
-			}
-		}
+/************************************
+	Get a reference to the corresponding managed list object.
+*************************************/
+ManageList* ManageList::getManagedListObject(){
+	return this->childList;		
+}
 
 
-};
+/*************************************
+	Set a reference to the next managed list object in sequence.
+*************************************/
+void ManageList::setNextManagedListObject(ManageList *nextWord){
+	//cout << "Set Next Word: "<< 
+	//						nextWord->getWordDataObject()->getWord2() << "\n";
+	// Set the reference to the next child in the sequence.
+	if (this->childList == NULL)
+		this->childList = nextWord;
+	else{
+		cout << "\nCan't override child\n";
+	}
+}
+/*************************************************
+	Section Start - ParseInputString
+
+ Constuctor for the class
+*************************************************/
+ParseInputString::ParseInputString(char *inputData){
+	cout << "InputData: "<<inputData<<"\n";
+	this->listManager = NULL;
+	this->splitString(inputData);
+}
+/*************************************************
+ Destructor for the class
+*************************************************/
+ParseInputString::~ParseInputString(){
+	//cout << "Destruct Object\n";
+	delete listManager;
+}
+/*************************************************
+ Parse an additional string (extra input data).
+*************************************************/
+ManageList* ParseInputString::getListStart(){
+	return this->listManager;	
+}
 
 /***************************************************
-	Class - ParseInputString
-		Split and digest the items into smaller, more compressed/compact objects.
+ Allow an additional line to be passed in. This is extra data
+ which equals a 'line' of data to be processed.
+***************************************************/	
+void ParseInputString::passInAdditionalLine(char *inputData){
+	this->splitString(inputData);
+}
 
-***************************************************/
-class ParseInputString{
-	public:
-		
-		ManageList *listManager;
-		
-
-		ParseInputString(char *inputData){
-			cout << "InputData: "<<inputData<<"\n";
-			this->listManager = NULL;
-			this->splitString(inputData);
-		}
-		// Destructor for the class
-		~ParseInputString(){
-			//cout << "Destruct Object\n";
-			delete listManager;
-		}
-		/************************************
-			Function getListStart.
-				Handler to request the start of the list (the beginning section). 
-		*************************************/
-		ManageList* getListStart(){
-			return this->listManager;	
-		}
-
-		/******************************
-			Allow an additional line to be passed in. This is extra data
-			which equals a 'line' of data to be processed.
-		*******************************/	
-		void passInAdditionalLine(char *inputData){
-			this->splitString(inputData);
-		}
-
-	private:
-		/*********************************************
-		 	Function: splitString.
-				Loop around all the characters which are present in the string
-			*********************************************/
-		void splitString(char* inputString){
+/***************************************************
+ Function: splitString.
+	Loop around all the characters which are present in the string
+****************************************************/
+void ParseInputString::splitString(char* inputString){
 			// Initialise the character sets for the individual works.
 			char wordData [WORDLENGTH];
 			this->initialiseWordData(&wordData[0]);
@@ -264,41 +262,43 @@ class ParseInputString{
 
 			}
 		}
-		/*********************************************
-			Function: Initialise the word data so it's values have a default
-								value of null.
-			Clear the word data - Set everything to be 'null'.
-		**********************************************/
-		void initialiseWordData(char *inputData){
-			for (int count = 0 ; count < WORDLENGTH ; count++){
-				inputData[0] = '\0';
-				inputData++;
-			}
+/*********************************************
+	Function: Initialise the word data so it's values have a default
+						value of null.
+	Clear the word data - Set everything to be 'null'.
+**********************************************/
+void ParseInputString::initialiseWordData(char *inputData){
+	for (int count = 0 ; count < WORDLENGTH ; count++){
+		inputData[0] = '\0';
+		inputData++;
+	}
+}
+/****************************************************
+ Function - addWordItemDataToList.	
+	This is a utility function to pass the word data into
+		a managed linked list.
+****************************************************/
+void ParseInputString::addWordItemDataToList(char *wordData){
+	if (strlen(wordData) > 0 ){
+		WordItem *wordItemData = new WordItem(wordData);
+		// Create a new object to manage the list data.
+		if (this->listManager == NULL){
+			this->listManager = new ManageList(wordItemData);
 		}
-		/****************************************
-			Function - addWordItemDataToList.	
-				This is a utility function to pass the word data into
-				a managed linked list.
-		*****************************************/
-		void addWordItemDataToList(char *wordData){
-			if (strlen(wordData) > 0 ){
-				WordItem *wordItemData = new WordItem(wordData);
-				// Create a new object to manage the list data.
-				if (this->listManager == NULL){
-					this->listManager = new ManageList(wordItemData);
-				}
-				else{
-					// Add a new item onto the list.
-					this->listManager->addListItem(wordItemData); 
-				}			
-			}						
-		}
-};
+		else{
+			// Add a new item onto the list.
+			this->listManager->addListItem(wordItemData); 
+		}			
+	}						
+}
 
 /*************************************
 	Input String Handler - Handler for the input data.
 	
 	- Input/output handler functions for the request activity/data processing.
+
+	- The corresponding functions are designed to allow 'portability' from a C
+		program doing the data processing.
 **************************************/
 ParseInputString *parseInputData = NULL;
 ManageList *listManager = NULL;
@@ -373,12 +373,3 @@ int clearDownDataSet(){
 	}
 }
 
-
-/*
-int main( int arg , char *args[] ){
-	cout << "Hello.\n";
-	char inputString[] = "The cat jumped over the wall";
-	ParseInputString *test = new ParseInputString(&inputString[0]);
-	delete test;
-	return 0;
-}*/
